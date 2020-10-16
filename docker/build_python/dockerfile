@@ -1,0 +1,13 @@
+FROM python:3.9-rc-alpine
+
+LABEL maintainer="Jimmy chienfeng0719@hotmail.com"
+
+ARG WORKDIR="app"
+RUN apk add --update --no-cache g++ gcc screen vim bash python3-dev libffi-dev build-base linux-headers pcre-dev
+RUN mkdir -p ${WORKDIR}
+WORKDIR ${WORKDIR}
+COPY requirements.txt .
+COPY src .
+
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN rm requirements.txt
