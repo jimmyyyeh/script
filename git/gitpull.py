@@ -14,6 +14,8 @@ class GitPull:
     @classmethod
     def _get_submodule(cls):
         git_config_path = os.path.join(cls._MODULE_PATH, '.git/config')
+        if not os.path.isfile(git_config_path):
+            sys.exit("【GIT MODULE NOT FOUND.】")
         with open(git_config_path, 'r') as f:
             git_config = f.read()
         if cls._SUBMODULE_PATTERN.search(git_config):
