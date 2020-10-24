@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*
+"""
+      ┏┓       ┏┓
+    ┏━┛┻━━━━━━━┛┻━┓
+    ┃      ☃      ┃
+    ┃  ┳┛     ┗┳  ┃
+    ┃      ┻      ┃
+    ┗━┓         ┏━┛
+      ┗┳        ┗━┓
+       ┃          ┣┓
+       ┃          ┏┛
+       ┗┓┓┏━━━━┳┓┏┛
+        ┃┫┫    ┃┫┫
+        ┗┻┛    ┗┻┛
+    God Bless,Never Bug
+"""
+
 import os
 import sys
 from getopt import getopt, GetoptError

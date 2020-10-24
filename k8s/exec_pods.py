@@ -17,7 +17,6 @@
 
 import sys
 import os
-import subprocess
 
 
 class ExecContainer:
@@ -27,16 +26,21 @@ class ExecContainer:
         if len(args) < 2:
             sys.exit()
         name_filter = args[1]
-        command = f'docker ps -f name={name_filter} --format "{{{{.Names}}}}"'
-        command_list = command.split()
-        container_list = subprocess.run(command_list, stdout=subprocess.PIPE).stdout.decode('utf-8')
-        container_list = container_list.split('\n')[:-1]
-        if not container_list:
-            sys.exit('CONTAINER NOT FOUND')
+        command = f'kubectl get pods -o=name --all-namespaces | grep {name_filter}'
+        pod_list = os.popen(command).readlines()
+        pod_list = [pod.strip() for pod in pod_list]
+
+        if not pod_list:
+            sys.exit('POD NOT FOUND')
         else:
-            container = container_list[0]
-            print(f'CONTAINER {container} FOUND')
-            command = f'docker exec -it {container} bash'
+            if len(pod_list) == 1:
+                pod = pod_list[0]
+            else:
+                print('PLEASE ENTER POD NUMBER:')
+                pod_index = input('\n'.join([f'【{index}】: {pod}' for index, pod in enumerate(pod_list)]))
+                pod = pod_list[int(pod_index) - 1]
+            print(f'POD {pod} FOUND')
+            command = f'kubectl exec -it {pod} bash'
             os.system(command)
 
 
