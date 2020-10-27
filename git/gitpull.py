@@ -45,9 +45,9 @@ class GitPull:
         if '-s' not in cls._OPTS_DICT:
             return
         cls._get_submodule()
-        os.system(f'git checkout {cls._BRANCH}')
         for submodule_path in cls._SUBMODULE_PATH:
             os.chdir(submodule_path)
+            os.system(f'git checkout {cls._BRANCH}') 
             os.system('git pull')
             print(f'【PULL SUBMODULE {submodule_path} DONE.】')
 
