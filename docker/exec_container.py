@@ -43,7 +43,7 @@ class ExecContainer:
         input_index = int(input_index)
         if input_index > len(container_list):
             sys.exit('INDEX ERROR')
-        container = container_list[- 1]
+        container = container_list[input_index - 1]
         print(f'CONTAINER {container} FOUND')
         os.system(f'docker exec -it {container} bash')
 
