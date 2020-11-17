@@ -35,7 +35,7 @@ class ExecContainer:
         if not container_list:
             sys.exit('CONTAINER NOT FOUND')
         container_list = sorted(container_list)
-        menu_str = '\n'.join([f'【{index + 1}.】 {container}' for index, container in enumerate(container_list)])
+        menu_str = '\n'.join([f'【{index}.】 {container}' for index, container in enumerate(container_list)])
         input_index = input(f'ENTER CONTAINER NUM:\n'
                             f'========================================\n'
                             f'{menu_str}\n'
@@ -43,7 +43,7 @@ class ExecContainer:
         input_index = int(input_index)
         if input_index > len(container_list):
             sys.exit('INDEX ERROR')
-        container = container_list[input_index - 1]
+        container = container_list[input_index]
         print(f'CONTAINER {container} FOUND')
         os.system(f'docker exec -it {container} bash')
 
