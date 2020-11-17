@@ -39,7 +39,7 @@ class ExecContainer:
                 print('PLEASE ENTER POD NUMBER:')
                 menu_str = '\n'.join([f'【{index}】: {pod}' for index, pod in enumerate(pod_list)])
                 pod_index = input(f'{menu_str}\n')
-                pod = pod_list[int(pod_index) - 1]
+                pod = pod_list[int(pod_index)]
             print(f'POD {pod} FOUND')
             command = f'kubectl exec -it {pod} -- bash'
             os.system(command)

@@ -38,7 +38,7 @@ class EnterScreen:
                                     ' awk \'/[At|De]tached/ {print $1}\' |'
                                     ' awk \'BEGIN {FS="."} {print $2}\'').readlines()
         screen_name_list = [screen_name.strip() for screen_name in screen_name_list]
-        screen_name_menu = '\n'.join([f'【{index + 1}.】 {screen_name}'
+        screen_name_menu = '\n'.join([f'【{index}.】 {screen_name}'
                                       for index, screen_name in enumerate(screen_name_list)])
         index = input('ENTER SCREEN NUM:\n'
                       '====================\n'
@@ -48,7 +48,7 @@ class EnterScreen:
         if index > len(screen_name_list):
             sys.exit()
         else:
-            screen_name = screen_name_list[index - 1]
+            screen_name = screen_name_list[index]
             cls._enter_screen(screen_name=screen_name)
 
     @classmethod
