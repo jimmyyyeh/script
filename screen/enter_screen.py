@@ -64,7 +64,7 @@ class EnterScreen:
         if not opts_dict.get('<screen_name>'):
             cls._enter_screen_by_list()
         else:
-            cls._enter_screen()
+            cls._enter_screen(opts_dict.get('<screen_name>'))
 
 
 if __name__ == '__main__':
