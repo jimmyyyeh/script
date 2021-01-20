@@ -41,9 +41,10 @@ class GitPull:
     def run(cls):
         opts, args = getopt(sys.argv[1:], 'sb:', ['pullsubmodule=', 'branch='])
         cls._OPTS_DICT = dict(opts)
-        cls._BRANCH = cls._OPTS_DICT.get('-b', 'develop')
+        cls._BRANCH = cls._OPTS_DICT.get('-b', None)
 
-        os.system(f'git checkout {cls._BRANCH}')
+        if cls._BRANCH:
+            os.system(f'git checkout {cls._BRANCH}')
         os.system('git pull')
         print('【GIT PULL MODULE DONE.】')
 
@@ -53,7 +54,8 @@ class GitPull:
         cls._get_submodule()
         for submodule_path in cls._SUBMODULE_PATH:
             os.chdir(submodule_path)
-            os.system(f'git checkout {cls._BRANCH}')
+            if cls._BRANCH:
+                os.system(f'git checkout {cls._BRANCH}')
             os.system('git pull')
             print(f'【PULL SUBMODULE {submodule_path} DONE.】')
 
