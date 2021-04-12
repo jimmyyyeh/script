@@ -24,7 +24,8 @@ class GetLogs:
     """
         【USAGE】
             python3 k8s_logs.py -p [pods name pattern]
-                             -n [tail lines want to print]
+                                -n [tail lines want to print]
+                                -f follow
         【EXAMPLE】
             python3 k8s_logs.py -p demo -n 5
 
@@ -45,8 +46,12 @@ class GetLogs:
         return pods_list
 
     @staticmethod
-    def _get_pod_logs(pod, line_nums):
-        log_str = f'kubectl logs {pod}'
+    def _get_pod_logs(pod, line_nums, follow):
+        if follow is None:
+            log_str = f'kubectl logs {pod}'
+        else:
+            log_str = f'kubectl logs {pod} -f'
+
         pod_log = os.popen(log_str).read().strip()
         pod_log = pod_log.split('\n')
         print('\n'.join(pod_log[-line_nums:]))
@@ -54,13 +59,14 @@ class GetLogs:
     @classmethod
     def run(cls):
         try:
-            opts, argv = getopt(sys.argv[1:], 'p:n:', ['pod=', 'num='])
+            opts, argv = getopt(sys.argv[1:], 'p:n:f', ['pod=', 'num='])
         except GetoptError:
             sys.exit(cls.__doc__)
         cls._OPTS = dict((opt[0], opt[1]) for opt in opts)
         if not set(cls._OPTS).intersection({'-p', '-n'}):
             sys.exit(cls.__doc__)
         pod_pattern = cls._OPTS['-p']
+        follow = cls._OPTS.get('-f')
         try:
             line_nums = int(cls._OPTS['-n'])
         except ValueError:
@@ -69,7 +75,7 @@ class GetLogs:
 
         for pod in pods_list:
             print(f'{"="*50} {pod} log {"="*50}')
-            cls._get_pod_logs(pod=pod, line_nums=line_nums)
+            cls._get_pod_logs(pod=pod, line_nums=line_nums, follow=follow)
             input()
 
 
