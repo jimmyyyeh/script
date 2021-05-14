@@ -49,12 +49,13 @@ class GetLogs:
     def _get_pod_logs(pod, line_nums, follow):
         if follow is None:
             log_str = f'kubectl logs {pod}'
+            pod_log = os.popen(log_str).read().strip()
+            pod_log = pod_log.split('\n')
+            print('\n'.join(pod_log[-line_nums:]))
+            input()
         else:
             log_str = f'kubectl logs {pod} -f'
-
-        pod_log = os.popen(log_str).read().strip()
-        pod_log = pod_log.split('\n')
-        print('\n'.join(pod_log[-line_nums:]))
+            os.system(log_str)
 
     @classmethod
     def run(cls):
@@ -63,12 +64,13 @@ class GetLogs:
         except GetoptError:
             sys.exit(cls.__doc__)
         cls._OPTS = dict((opt[0], opt[1]) for opt in opts)
-        if not set(cls._OPTS).intersection({'-p', '-n'}):
+        if not set(cls._OPTS).intersection({'-p'}):
             sys.exit(cls.__doc__)
         pod_pattern = cls._OPTS['-p']
         follow = cls._OPTS.get('-f')
         try:
-            line_nums = int(cls._OPTS['-n'])
+            line_nums = cls._OPTS.get('-n', 100)
+            line_nums = int(line_nums)
         except ValueError:
             sys.exit(cls.__doc__)
         pods_list = cls._get_pods_list(pod_pattern=pod_pattern)
@@ -76,7 +78,6 @@ class GetLogs:
         for pod in pods_list:
             print(f'{"="*50} {pod} log {"="*50}')
             cls._get_pod_logs(pod=pod, line_nums=line_nums, follow=follow)
-            input()
 
 
 if __name__ == '__main__':
