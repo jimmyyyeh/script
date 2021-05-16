@@ -25,7 +25,7 @@ class BuildImage:
     _REGISTRY_HOST = os.environ.get('DOCKER_REGISTRY')
 
     @classmethod
-    def build(cls):
+    def main(cls):
         if not cls._REGISTRY_HOST:
             sys.exit('missing registry in environ')
         opts, args = getopt(sys.argv[1:], 'n:f:t:')
@@ -56,4 +56,4 @@ class BuildImage:
 
 
 if __name__ == '__main__':
-    BuildImage.build()
+    BuildImage.main()
