@@ -1,0 +1,11 @@
+# 建立只能讀pods 及 pods log的cluster role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: read-pods
+rules:
+- apiGroups: [""]
+  resources:
+     - "pods/log"
+     - "pods"
+  verbs: ["get", "watch", "list"]
