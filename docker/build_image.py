@@ -28,7 +28,7 @@ class BuildImage:
     def main(cls):
         if not cls._REGISTRY_HOST:
             sys.exit('missing registry in environ')
-        opts, args = getopt(sys.argv[1:], 'n:f:t:')
+        opts, args = getopt(sys.argv[1:], 'n:f:t:y')
         opts_dict = dict(opts)
         if '-t' not in opts_dict:
             sys.exit('missing tag arguments')
@@ -42,7 +42,7 @@ class BuildImage:
             project_name = os.path.basename(project_path)
             docker_file = None
         print(f'BUILDING PROJECT: {project_name} DOCKER IMAGE: {docker_file} WITH TAG {tag}')
-        option = input('Y / N:')
+        option = 'y' if '-y' in opts_dict else input('Y / N:')
         if option.lower() != 'y':
             sys.exit()
         if docker_file:
