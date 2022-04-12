@@ -1,19 +1,19 @@
-# sh ./create.sh $1=使用者名稱 $2=cluster name $3=role $4=namespace
+# sh ./create.sh $1=使用者名稱 $2=cluster name $3=role $4=namespace $api_server
 # APISERVER=$(kubectl config view --minify | grep server | cut -f 2- -d ":" | tr -d " ")
 
 USERNAME=$1
 CLUSTER_NAME=$2
 ROLE=$3
 NAMESPACE=$4
-APISERVER=`kubectl config view -o jsonpath="{.clusters[*].cluster.server}"`
+APISERVER=$5
 KUBE_CONFIG=$USERNAME.kubeconfig
 KEY=$USERNAME.key
 CRT=$USERNAME.crt
 CSR=$USERNAME.csr
 
 ## *** 如果下列檔案都產好了 可以只執行這一行就好 單純建立角色***
-#kubectl create rolebinding $USERNAME \
-#--clusterrole=$ROLE --user=$USERNAME --namespace=$NAMESPACE
+kubectl create rolebinding $USERNAME \
+--clusterrole=$ROLE --user=$USERNAME --namespace=$NAMESPACE
 
 # 產生.key file
 if ! test -f "$KEY"; then
@@ -72,8 +72,10 @@ kubectl config set-context $CLUSTER_NAME-cluster \
   --namespace=$NAMESPACE \
   --kubeconfig=$USERNAME.kubeconfig
 
+kubectl config use-context $CLUSTER_NAME-cluster
+
+# ***多個namespace的話最後再執行這行***
 # 備份原本config檔案 避免遺失
 mv ~/.kube/config ~/.kube/config.bak
 # 覆蓋config檔案
 cp $USERNAME.kubeconfig ~/.kube/config
-kubectl config use-context $CLUSTER_NAME-cluster
